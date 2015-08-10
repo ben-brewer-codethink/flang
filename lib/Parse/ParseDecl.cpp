@@ -316,12 +316,16 @@ bool Parser::ParseDeclarationTypeSpec(DeclSpec &DS, bool AllowSelectors,
   ExprResult Kind;
   ExprResult Len;
 
-  // FIXME: no Kind for double complex and double precision
   switch (DS.getTypeSpecType()) {
   case DeclSpec::TST_struct:
     break;
   default:
     ConsumeToken();
+
+    // no Kind for double complex and double precision
+    if (DS.isDoublePrecision())
+      break;
+
     if (ConsumeIfPresent(tok::star)) {
       // FIXME: proper obsolete COMPLEX*16 support
       ConsumeAnyToken();
